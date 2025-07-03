@@ -1,34 +1,71 @@
-# Gradle files
+# Gradle
 .gradle/
-build/
+**/build/
+**/captures/
 
 # Local configuration file (sdk path, etc)
 local.properties
 
-# Log/OS Files
-*.log
-
-# Android Studio generated files and folders
-captures/
-.externalNativeBuild/
-.cxx/
-*.aab
-*.apk
-output-metadata.json
-
-# IntelliJ
-*.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
-
-# Keystore files
+# Signing files
 *.jks
 *.keystore
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
 
-# Android Profiling
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Log files
+*.log
+
+# Android Studio Navigation Editor temp files
+.navigation/
+
+# Google Services JSON (contains API keys — không nên đẩy lên git)
+app/google-services.json
+
+# Crashlytics / Firebase
+app/fabric.properties
+
+# Others
+*.class
+*.apk
+*.ap_ 
+*.cxx/
+
+# NDK
+.externalNativeBuild/
+
+# Jetpack Compose Compiler Metrics/Reports
+*.cxx/
 *.hprof
+
+# Test result files
+**/test-results/
+**/outputs/
+
+# Android Studio Profiling
+*.hprof
+captures/
+
+# Dependency directories
+/.gradle/
+/.idea/libraries/
+
+# Build artifacts
+/build/
+/app/build/
+
+# local keystore files
+keystore.properties
+
+# Miscellaneous
+*.swp
+*.swo

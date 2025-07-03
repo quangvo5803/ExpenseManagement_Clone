@@ -1,5 +1,8 @@
 package com.example.myapplication.data.model;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Transaction {
     private int id;
     private String type; // "income" hoặc "expense"
@@ -20,8 +23,11 @@ public class Transaction {
     public int getId() { return id; }
     public String getType() { return type; }
     public String getCategory() { return category; }
-    public double getAmount() { return amount; }
-    public String getDate() { return date; }
+    public  double getAmount(){return amount;}
+    public String getAmountInVND() {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return formatter.format(amount);
+    }    public String getDate() { return date; }
     public String getNote() { return note; }
 
     public void setId(int id) { this.id = id; }

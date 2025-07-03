@@ -41,10 +41,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         // Hiển thị số tiền và màu sắc
         if (transaction.getType().equals("income")) {
-            holder.tvAmount.setText("+ " + transaction.getAmount() + "đ");
+            holder.tvAmount.setText("+ " + transaction.getAmountInVND());
             holder.tvAmount.setTextColor(Color.parseColor("#4CAF50"));
         } else {
-            holder.tvAmount.setText("- " + transaction.getAmount() + "đ");
+            holder.tvAmount.setText("- " + transaction.getAmountInVND());
             holder.tvAmount.setTextColor(Color.parseColor("#F44336"));
         }
 
@@ -70,7 +70,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             tvDate = itemView.findViewById(R.id.tvDate);
         }
     }
-
+    public void setTransactionList(List<Transaction> list) {
+        this.transactionList = list;
+        notifyDataSetChanged();
+    }
     // Hàm chọn icon theo category
     private int getIconResource(String category) {
         switch (category) {

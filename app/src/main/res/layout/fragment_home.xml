@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".UI.HomeFragment">
+
+    <!-- NestedScrollView để bọc header, calendar và tổng thu/chi -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fillViewport="true"
+        android:background="#000000">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Header -->
+            <TextView
+                android:text="Lịch thu chi"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp" />
+
+            <!-- Thanh chuyển tháng -->
+            <LinearLayout
+                android:id="@+id/monthNavigation"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:gravity="center"
+                android:background="#111111">
+
+                <ImageButton
+                    android:id="@+id/btnPrevMonth"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Prev"
+                    android:src="@drawable/ic_chevron_left"
+                    app:tint="@color/white"/>
+
+                <TextView
+                    android:id="@+id/tvCurrentMonth"
+                    android:text="Tháng 7, 2025"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageButton
+                    android:id="@+id/btnNextMonth"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Next"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/white"/>
+            </LinearLayout>
+
+            <!-- CalendarView -->
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mcv_selectionColor="#03DAC5"
+                app:mcv_showOtherDates="none"
+                app:mcv_tileWidth="48dp"
+                app:mcv_tileHeight="48dp"
+                app:mcv_weekDayTextAppearance="@style/CustomCalendarWeekDay"
+                app:mcv_dateTextAppearance="@style/CustomCalendarDate" />
+
+            <!-- Tổng thu/chi -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:background="#222222">
+
+                <TextView
+                    android:id="@+id/tvIncome"
+                    android:text="Thu nhập: 0đ"
+                    android:textColor="#00BCD4"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvExpense"
+                    android:text="Chi tiêu: 0đ"
+                    android:textColor="#FF5722"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:text="Tổng: 0đ"
+                    android:textColor="#FFFFFF"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- List transaction -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTransactions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:background="#000000"
+        android:nestedScrollingEnabled="true"/>
+
+</LinearLayout>

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.TransactionAdapter;
+import com.example.myapplication.data.database.DatabaseHelper;
 import com.example.myapplication.data.model.Transaction;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -116,11 +117,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadDummyTransactions() {
-        allTransactions.add(new Transaction(1, "expense", "Ăn uống", 50000, "2025-07-01", "Ăn sáng"));
-        allTransactions.add(new Transaction(2, "income", "Lương", 15000000, "2025-07-05", "Lương tháng 7"));
-        allTransactions.add(new Transaction(3, "expense", "Di chuyển", 30000, "2025-07-10", "Xe bus"));
-        allTransactions.add(new Transaction(4, "expense", "Y tế", 200000, "2025-07-01", "Mua thuốc"));
-        allTransactions.add(new Transaction(5, "income", "Tiền thưởng", 2000000, "2025-08-15", "Thưởng dự án"));
+        //allTransactions.add(new Transaction(1, "expense", "Ăn uống", 50000, "2025-07-01", "Ăn sáng"));
+        //allTransactions.add(new Transaction(2, "income", "Lương", 15000000, "2025-07-05", "Lương tháng 7"));
+        //allTransactions.add(new Transaction(3, "expense", "Di chuyển", 30000, "2025-07-10", "Xe bus"));
+        //allTransactions.add(new Transaction(4, "expense", "Y tế", 200000, "2025-07-01", "Mua thuốc"));
+        //allTransactions.add(new Transaction(5, "income", "Tiền thưởng", 2000000, "2025-08-15", "Thưởng dự án"));
+        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+        allTransactions = dbHelper.getAllTransactions();
     }
 
     private void filterTransactionsByMonth() {

@@ -1,5 +1,6 @@
 package com.example.myapplication.UI;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,10 +26,14 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,11 +42,12 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private MaterialCalendarView calendarView;
-    private TextView tvCurrentMonth;
+    private TextView tvCurrentMonth,tvIncome,tvExpense,tvTotal;
     private RecyclerView rvTransactions;
     private TransactionAdapter adapter;
     private List<Transaction> allTransactions;
     private Calendar currentCalendar;
+    private DatabaseHelper databaseHelper;
 
     @Nullable
     @Override
@@ -56,6 +62,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        //Database
+        databaseHelper = new DatabaseHelper(requireContext());
+
         // Khởi tạo thư viện AndroidThreeTen
         AndroidThreeTen.init(requireContext());
 
@@ -63,6 +73,10 @@ public class HomeFragment extends Fragment {
         calendarView = view.findViewById(R.id.calendarView);
         tvCurrentMonth = view.findViewById(R.id.tvCurrentMonth);
         rvTransactions = view.findViewById(R.id.rvTransactions);
+        tvIncome = view.findViewById(R.id.tvIncome);
+        tvExpense = view.findViewById(R.id.tvExpense);
+        tvTotal = view.findViewById(R.id.tvTotal);
+
         ImageButton btnNext = view.findViewById(R.id.btnNextMonth);
         ImageButton btnPrev = view.findViewById(R.id.btnPrevMonth);
 
@@ -76,8 +90,9 @@ public class HomeFragment extends Fragment {
         rvTransactions.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvTransactions.setAdapter(adapter);
 
-        // Load dữ liệu mẫu
-        loadDummyTransactions();
+        // Load dữ liệu
+        allTransactions = databaseHelper.getAllTransactions();
+        
 
         // Chuyển tháng
         btnNext.setOnClickListener(v -> {
@@ -97,6 +112,7 @@ public class HomeFragment extends Fragment {
 
         // Load transaction theo tháng hiện tại
         filterTransactionsByMonth();
+        decorateCalendarWithTransactions();
     }
 
     private void updateCalendarView() {
@@ -138,6 +154,7 @@ public class HomeFragment extends Fragment {
         }
 
         adapter.setTransactionList(filteredList);
+        calculateTotal(filteredList);
     }
 
     private void filterTransactionsByDate(CalendarDay date) {
@@ -152,5 +169,47 @@ public class HomeFragment extends Fragment {
         }
 
         adapter.setTransactionList(filteredList);
+        calculateTotal(filteredList);
     }
+
+    private void calculateTotal(List<Transaction> transactions){
+        double income = 0;
+        double expense = 0;
+        for (Transaction t : transactions){
+            if(t.getType().equals("income"))
+            {
+                income += t.getAmount();
+            }else if(t.getType().equals("expense")){
+                expense += t.getAmount();
+            }
+        }
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        tvIncome.setText( formatter.format(income));
+        tvExpense.setText(formatter.format(expense));
+        tvTotal.setText(formatter.format(income - expense));
+    }
+    private void decorateCalendarWithTransactions() {
+        Map<CalendarDay, List<Integer>> dotMap = new HashMap<>();
+
+        for (Transaction t : allTransactions) {
+            LocalDate localDate = LocalDate.parse(t.getDate());
+            CalendarDay day = CalendarDay.from(localDate);
+
+            List<Integer> dots = dotMap.getOrDefault(day, new ArrayList<>());
+
+            if (t.getType().equals("income") && !dots.contains(Color.GREEN)) {
+                dots.add(Color.GREEN);
+            }
+            if (t.getType().equals("expense") && !dots.contains(Color.RED)) {
+                dots.add(Color.RED);
+            }
+
+            dotMap.put(day, dots);
+        }
+
+        calendarView.removeDecorators();
+        for (Map.Entry<CalendarDay, List<Integer>> entry : dotMap.entrySet()) {
+            calendarView.addDecorator(new TransactionDotDecorator(entry.getKey(), entry.getValue()));
+        }    }
+
 }

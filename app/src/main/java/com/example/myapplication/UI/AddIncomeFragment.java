@@ -88,8 +88,8 @@ public class AddIncomeFragment extends Fragment {
         // Danh sách danh mục
         categoryList = new ArrayList<>();
         categoryList.add(new Category("Tiền lương", R.drawable.ic_income));
-        categoryList.add(new Category("Đầu tư", R.drawable.ic_invest));
-        categoryList.add(new Category("Phụ cấp", R.drawable.ic_save));
+        categoryList.add(new Category("Tiền đầu tư", R.drawable.ic_invest));
+        categoryList.add(new Category("Tiền phụ cấp", R.drawable.ic_save));
         categoryList.add(new Category("Tiền thưởng", R.drawable.ic_gift));
 
         categoryAdapter = new CategoryAdapter(getContext(), categoryList, category -> {

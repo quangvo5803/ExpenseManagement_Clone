@@ -1,7 +1,6 @@
 package com.example.myapplication.UI;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,20 +26,28 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-public class HomeFragment extends Fragment  {
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
+public class HomeFragment extends Fragment {
 
     private MaterialCalendarView calendarView;
-    private TextView tvCurrentMonth;
+    private TextView tvCurrentMonth,tvIncome,tvExpense,tvTotal;
     private RecyclerView rvTransactions;
     private TransactionAdapter adapter;
     private List<Transaction> allTransactions;
     private Calendar currentCalendar;
-    private TextView tvIncome, tvExpense, tvTotal;
+    private DatabaseHelper databaseHelper;
 
     @Nullable
     @Override
@@ -56,6 +62,10 @@ public class HomeFragment extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        //Database
+        databaseHelper = new DatabaseHelper(requireContext());
+
         // Khởi tạo thư viện AndroidThreeTen
         AndroidThreeTen.init(requireContext());
 
@@ -63,12 +73,12 @@ public class HomeFragment extends Fragment  {
         calendarView = view.findViewById(R.id.calendarView);
         tvCurrentMonth = view.findViewById(R.id.tvCurrentMonth);
         rvTransactions = view.findViewById(R.id.rvTransactions);
-        ImageButton btnNext = view.findViewById(R.id.btnNextMonth);
-        ImageButton btnPrev = view.findViewById(R.id.btnPrevMonth);
-
         tvIncome = view.findViewById(R.id.tvIncome);
         tvExpense = view.findViewById(R.id.tvExpense);
         tvTotal = view.findViewById(R.id.tvTotal);
+
+        ImageButton btnNext = view.findViewById(R.id.btnNextMonth);
+        ImageButton btnPrev = view.findViewById(R.id.btnPrevMonth);
 
         // Khởi tạo calendar hiện tại
         currentCalendar = Calendar.getInstance();
@@ -80,8 +90,9 @@ public class HomeFragment extends Fragment  {
         rvTransactions.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvTransactions.setAdapter(adapter);
 
-        // Load dữ liệu mẫu
-        loadDummyTransactions();
+        // Load dữ liệu
+        allTransactions = databaseHelper.getAllTransactions();
+
 
         // Chuyển tháng
         btnNext.setOnClickListener(v -> {
@@ -101,8 +112,8 @@ public class HomeFragment extends Fragment  {
 
         // Load transaction theo tháng hiện tại
         filterTransactionsByMonth();
+        decorateCalendarWithTransactions();
     }
-
 
     private void updateCalendarView() {
         LocalDate date = LocalDate.of(
@@ -121,21 +132,6 @@ public class HomeFragment extends Fragment  {
         tvCurrentMonth.setText(sdf.format(currentCalendar.getTime()));
     }
 
-    private void loadDummyTransactions() {
-        /*allTransactions.add(new Transaction(1, "expense", "Ăn uống", 50000, "2025-07-01", "Ăn sáng"));
-        allTransactions.add(new Transaction(2, "income", "Lương", 15000000, "2025-07-05", "Lương tháng 7"));
-        allTransactions.add(new Transaction(3, "expense", "Di chuyển", 30000, "2025-07-10", "Xe bus"));
-        allTransactions.add(new Transaction(4, "expense", "Y tế", 200000, "2025-07-01", "Mua thuốc"));
-        allTransactions.add(new Transaction(5, "income", "Tiền thưởng", 2000000, "2025-07-15", "Thưởng dự án"));*/
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        allTransactions = dbHelper.getAllTransactions();
-
-        // Debug log
-        /*Log.d("HomeFragment", "Loaded " + allTransactions.size() + " transactions from database");
-        for (Transaction t : allTransactions) {
-            Log.d("HomeFragment", "Transaction: " + t.getType() + " - " + t.getCategory() + " - " + t.getAmount() + " - " + t.getDate());
-        }*/
-    }
 
     private void filterTransactionsByMonth() {
         List<Transaction> filteredList = new ArrayList<>();
@@ -148,11 +144,8 @@ public class HomeFragment extends Fragment  {
             }
         }
 
-        // Debug log
-        /*android.util.Log.d("HomeFragment", "Filtered " + filteredList.size() + " transactions for month: " + targetMonth);*/
-
         adapter.setTransactionList(filteredList);
-        updateSummary(filteredList);
+        calculateTotal(filteredList);
     }
 
     private void filterTransactionsByDate(CalendarDay date) {
@@ -167,44 +160,47 @@ public class HomeFragment extends Fragment  {
         }
 
         adapter.setTransactionList(filteredList);
-        updateSummary(filteredList);
+        calculateTotal(filteredList);
     }
-    private void updateSummary(List<Transaction> list) {
-        double totalIncome = 0;
-        double totalExpense = 0;
 
-        for (Transaction t : list) {
-            if (t.getType().equals("income")) {
-                totalIncome += t.getAmount();
-            } else if (t.getType().equals("expense")) {
-                totalExpense += t.getAmount();
+    private void calculateTotal(List<Transaction> transactions){
+        double income = 0;
+        double expense = 0;
+        for (Transaction t : transactions){
+            if(t.getType().equals("income"))
+            {
+                income += t.getAmount();
+            }else if(t.getType().equals("expense")){
+                expense += t.getAmount();
             }
         }
-
-        double total = totalIncome - totalExpense;
-
-        tvIncome.setText("Thu nhập: " + formatMoney(totalIncome) + "đ");
-        tvExpense.setText("Chi tiêu: " + formatMoney(totalExpense) + "đ");
-        tvTotal.setText("Tổng: " + formatMoney(total) + "đ");
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        tvIncome.setText( formatter.format(income));
+        tvExpense.setText(formatter.format(expense));
+        tvTotal.setText(formatter.format(income - expense));
     }
+    private void decorateCalendarWithTransactions() {
+        Map<CalendarDay, List<Integer>> dotMap = new HashMap<>();
 
-    private String formatMoney(double amount) {
-        return String.format("%,.0f", amount);
-    }
+        for (Transaction t : allTransactions) {
+            LocalDate localDate = LocalDate.parse(t.getDate());
+            CalendarDay day = CalendarDay.from(localDate);
 
-    @Override
-    public void onResume() {
-        super.onResume();
+            List<Integer> dots = dotMap.getOrDefault(day, new ArrayList<>());
 
-        SharedPreferences prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
-        long lastSaveTime = prefs.getLong("last_save_time", 0);
+            if (t.getType().equals("income") && !dots.contains(Color.GREEN)) {
+                dots.add(Color.GREEN);
+            }
+            if (t.getType().equals("expense") && !dots.contains(Color.RED)) {
+                dots.add(Color.RED);
+            }
 
-        if (lastSaveTime > 0) {
-            Log.d("HomeFragment", "Reload triggered: last_save_time=" + lastSaveTime);
-            loadDummyTransactions();         // Load lại dữ liệu mới nhất từ DB
-            filterTransactionsByMonth();    // Lọc lại theo tháng đang hiển thị
-            prefs.edit().putLong("last_save_time", 0).apply(); // reset
+            dotMap.put(day, dots);
         }
-    }
+
+        calendarView.removeDecorators();
+        for (Map.Entry<CalendarDay, List<Integer>> entry : dotMap.entrySet()) {
+            calendarView.addDecorator(new TransactionDotDecorator(entry.getKey(), entry.getValue()));
+        }    }
 
 }

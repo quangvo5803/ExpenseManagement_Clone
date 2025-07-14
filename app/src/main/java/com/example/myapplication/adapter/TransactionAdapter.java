@@ -91,7 +91,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 return R.drawable.ic_medical;
             case "Tiền nhà":
                 return R.drawable.ic_home;
-            case "Lương":
+            case "Tiền lương":
                 return R.drawable.ic_income;
             case "Tiền phụ cấp":
                 return  R.drawable.ic_save;

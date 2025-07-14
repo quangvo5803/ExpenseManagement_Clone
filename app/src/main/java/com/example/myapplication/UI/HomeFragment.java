@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         // Load dữ liệu
         allTransactions = databaseHelper.getAllTransactions();
-        
+
 
         // Chuyển tháng
         btnNext.setOnClickListener(v -> {
@@ -132,15 +132,6 @@ public class HomeFragment extends Fragment {
         tvCurrentMonth.setText(sdf.format(currentCalendar.getTime()));
     }
 
-    private void loadDummyTransactions() {
-        //allTransactions.add(new Transaction(1, "expense", "Ăn uống", 50000, "2025-07-01", "Ăn sáng"));
-        //allTransactions.add(new Transaction(2, "income", "Lương", 15000000, "2025-07-05", "Lương tháng 7"));
-        //allTransactions.add(new Transaction(3, "expense", "Di chuyển", 30000, "2025-07-10", "Xe bus"));
-        //allTransactions.add(new Transaction(4, "expense", "Y tế", 200000, "2025-07-01", "Mua thuốc"));
-        //allTransactions.add(new Transaction(5, "income", "Tiền thưởng", 2000000, "2025-08-15", "Thưởng dự án"));
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        allTransactions = dbHelper.getAllTransactions();
-    }
 
     private void filterTransactionsByMonth() {
         List<Transaction> filteredList = new ArrayList<>();

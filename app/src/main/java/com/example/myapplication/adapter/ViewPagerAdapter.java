@@ -5,9 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.myapplication.UI.AddTransactionFragment;
 import com.example.myapplication.UI.ChiFragment;
-import com.example.myapplication.UI.ThuFragment;
+import com.example.myapplication.UI.AddIncomeFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
@@ -18,8 +17,11 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 0) return new ChiFragment();
-        else return new ThuFragment(); // rỗng
+        if (position == 0) {
+            return new ChiFragment();
+        } else {
+            return new AddIncomeFragment();
+        }
     }
 
     @Override

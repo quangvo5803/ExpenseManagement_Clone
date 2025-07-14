@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.myapplication.UI.ChiFragment;
+import com.example.myapplication.UI.AddExpenseFragment;
 import com.example.myapplication.UI.AddIncomeFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -18,7 +18,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 0) {
-            return new ChiFragment();
+            return new AddExpenseFragment();
         } else {
             return new AddIncomeFragment();
         }

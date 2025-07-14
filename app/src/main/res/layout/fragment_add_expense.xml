@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
 
         <!-- Ngày -->
         <LinearLayout
@@ -50,7 +50,7 @@
 
             <!-- Ngày được chọn -->
             <TextView
-                android:id="@+id/tvDate"
+                android:id="@+id/etDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -74,6 +74,7 @@
 
         </LinearLayout>
 
+
         <!-- Ghi chú  -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,7 +96,7 @@
 
             <!-- Nội dung ghi chú -->
             <EditText
-                android:id="@+id/tvNote"
+                android:id="@+id/etNote"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
@@ -129,7 +130,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="Tiền thu"
+                android:text="Tiền chi"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -161,7 +162,8 @@
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
-        <!--Danh mục-->
+
+        <!-- Danh mục tiêu đề -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -183,7 +185,7 @@
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nhập khoản Tiền thu"
+            android:text="Nhập khoản Tiền chi"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/white"
             android:textColor="@android:color/black"

@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,20 +29,24 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class ChiFragment extends Fragment {
+public class AddExpenseFragment extends Fragment {
     private RecyclerView rvCategory;
     private List<Category> categoryList;
     private CategoryAdapter categoryAdapter;
     private String selectedCategory = "";
-
-    private EditText etNote, etAmount, etDate;
+    private TextView etDate;
+    private EditText etNote, etAmount;
     private Button btnSave;
+
+    private final Calendar calendar = Calendar.getInstance();
+    private final SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chi, container, false); // bạn đã có layout này
+        View view = inflater.inflate(R.layout.fragment_add_expense, container, false); // bạn đã có layout này
 
         etDate = view.findViewById(R.id.etDate);
         etNote = view.findViewById(R.id.etNote);
@@ -49,19 +55,53 @@ public class ChiFragment extends Fragment {
         rvCategory = view.findViewById(R.id.rvCategory);
         rvCategory.setLayoutManager(new GridLayoutManager(getContext(), 4));
 
+        ImageView ivPrevDate = view.findViewById(R.id.ivPrevDate);
+        ImageView ivNextDate = view.findViewById(R.id.ivNextDate);
+
+        // Set ngày hôm nay
+        etDate.setText(displayFormat.format(calendar.getTime()));
+
+        // Chọn ngày với DatePicker
+        etDate.setOnClickListener(v -> {
+            DatePickerDialog dialog = new DatePickerDialog(
+                    requireContext(),
+                    (view1, year, month, dayOfMonth) -> {
+                        calendar.set(year, month, dayOfMonth);
+                        etDate.setText(displayFormat.format(calendar.getTime()));
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+            dialog.show();
+        });
+
+        // Chuyển ngày
+        ivPrevDate.setOnClickListener(v -> {
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            etDate.setText(displayFormat.format(calendar.getTime()));
+        });
+
+        ivNextDate.setOnClickListener(v -> {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            etDate.setText(displayFormat.format(calendar.getTime()));
+        });
+
         // Danh sách danh mục
         categoryList = new ArrayList<>();
         categoryList.add(new Category("Ăn uống", R.drawable.ic_food));
         categoryList.add(new Category("Chi tiêu hàng ngày", R.drawable.ic_laundary));
         categoryList.add(new Category("Quần áo", R.drawable.ic_clother));
-        categoryList.add(new Category("Mỹ phẩm", R.drawable.ic_gift));
+        categoryList.add(new Category("Quà", R.drawable.ic_gift));
         categoryList.add(new Category("Phí giao lưu", R.drawable.ic_beer));
         categoryList.add(new Category("Di chuyển", R.drawable.ic_transport));
         categoryList.add(new Category("Mart", R.drawable.ic_home));
+        categoryList.add(new Category("Y tế", R.drawable.ic_medical));
+
 
         categoryAdapter = new CategoryAdapter(getContext(), categoryList, category -> {
             selectedCategory = category.getName();
-            Toast.makeText(getContext(), "Đã chọn: " + selectedCategory, Toast.LENGTH_SHORT).show();
+
         });
 
         rvCategory.setAdapter(categoryAdapter);
@@ -100,7 +140,7 @@ public class ChiFragment extends Fragment {
 
             Transaction transaction = new Transaction(
                     0,
-                    "expense",  // hoặc có thể cho người dùng chọn "income"/"expense"
+                    "income",
                     selectedCategory,
                     amount,
                     dbFormattedDate,

@@ -4,10 +4,12 @@ import com.example.myapplication.R;
 import com.example.myapplication.adapter.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,12 +46,14 @@ public class AddTransactionFragment extends Fragment {
 
         // Gắn TabLayout và ViewPager2
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            if (position == 0) {
-                tab.setText("Sổ Chi");
-            } else {
-                tab.setText("Sổ Thu");
-            }
+            TextView tabText = new TextView(getContext());
+            tabText.setText(position == 0 ? "Sổ Chi" : "Sổ Thu");
+            tabText.setTextColor(Color.WHITE);
+            tabText.setPadding(20, 8, 20, 8);
+            tabText.setTextSize(15);
+            tab.setCustomView(tabText);
         }).attach();
+
 
         return view;
     }

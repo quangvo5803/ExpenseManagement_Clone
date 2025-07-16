@@ -73,6 +73,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         this.transactions = newTransactions;
         notifyDataSetChanged();
     }
+
+    public void setTransactionList(List<Transaction> transactions) {
+        this.transactions = transactions;
+        notifyDataSetChanged();
+    }
     // Hàm chọn icon theo category
     private int getIconResource(String category) {
         switch (category) {
@@ -100,6 +105,60 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 return  R.drawable.ic_invest;
             default:
                 return R.drawable.ic_launcher_foreground;
+        }
+    }
+
+    // Thêm TransactionViewHolder inner class
+    class TransactionViewHolder extends RecyclerView.ViewHolder {
+        private TextView tvCategoryIcon, tvCategory, tvDescription, tvDate, tvAmount;
+
+        public TransactionViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvCategoryIcon = itemView.findViewById(R.id.tvCategoryIcon);
+            tvCategory = itemView.findViewById(R.id.tvCategory);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvAmount = itemView.findViewById(R.id.tvAmount);
+        }
+
+        public void bind(Transaction transaction) {
+            // Set icon
+            String icon = categoryIcons.get(transaction.getCategory());
+            if (icon != null) {
+                tvCategoryIcon.setText(icon);
+            } else {
+                tvCategoryIcon.setText("📋");
+            }
+
+            // Set category
+            tvCategory.setText(transaction.getCategory());
+
+            // Set description (sửa từ getDescription() thành getNote())
+            tvDescription.setText(transaction.getNote());
+
+            // Set date
+            try {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                String formattedDate = outputFormat.format(inputFormat.parse(transaction.getDate()));
+                tvDate.setText(formattedDate);
+            } catch (Exception e) {
+                tvDate.setText(transaction.getDate());
+            }
+
+            // Set amount
+            NumberFormat formatter = NumberFormat.getNumberInstance(Locale.getDefault());
+            formatter.setMinimumFractionDigits(0);
+            formatter.setMaximumFractionDigits(0);
+            String formattedAmount = formatter.format(transaction.getAmount());
+
+            if (transaction.getType().equals("income")) {
+                tvAmount.setText("+" + formattedAmount + "đ");
+                tvAmount.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_blue_light));
+            } else {
+                tvAmount.setText("-" + formattedAmount + "đ");
+                tvAmount.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_red_light));
+            }
         }
     }
 }

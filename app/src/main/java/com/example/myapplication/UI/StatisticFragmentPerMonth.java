@@ -194,7 +194,7 @@ public class StatisticFragmentPerMonth extends Fragment {
         filteredTransactions.sort((t1, t2) -> t2.getDate().compareTo(t1.getDate()));
 
         // Cập nhật adapter
-        adapter.updateTransactions(filteredTransactions);
+        adapter.setTransactionList(filteredTransactions);
     }
 
     private String formatCurrency(double amount) {

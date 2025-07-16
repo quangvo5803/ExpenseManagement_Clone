@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
             } else if (item.getItemId() == R.id.nav_stats) {
-                selectedFragment = new StatisticFragment();
+                selectedFragment = new StatisticFragmentPerMonth();
             }
             if (selectedFragment != null) {
                 getSupportFragmentManager()

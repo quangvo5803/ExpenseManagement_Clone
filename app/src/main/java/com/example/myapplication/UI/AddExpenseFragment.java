@@ -140,7 +140,7 @@ public class AddExpenseFragment extends Fragment {
 
             Transaction transaction = new Transaction(
                     0,
-                    "income",
+                    "expense",
                     selectedCategory,
                     amount,
                     dbFormattedDate,

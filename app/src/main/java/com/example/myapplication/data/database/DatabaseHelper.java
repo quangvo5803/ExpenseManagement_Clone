@@ -85,11 +85,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_TRANSACTIONS, "id=?", new String[]{String.valueOf(id)});
         db.close();
     }
-
-    // Xoá tất cả giao dịch
-    /*public void deleteAllTransactions() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TRANSACTIONS, null, null);
-        db.close();
-    }*/
 }

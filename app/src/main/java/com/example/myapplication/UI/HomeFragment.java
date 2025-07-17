@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         // Load dữ liệu
         allTransactions = databaseHelper.getAllTransactions();
-
+        
 
         // Chuyển tháng
         btnNext.setOnClickListener(v -> {

@@ -55,6 +55,7 @@ public class StatisticFragmentPerMonth extends Fragment {
         btnNext = view.findViewById(R.id.btnNextMonth);
         recyclerView = view.findViewById(R.id.recyclerView);
 
+
         // Khởi tạo DatabaseHelper
         dbHelper = new DatabaseHelper(requireContext());
 
@@ -101,6 +102,14 @@ public class StatisticFragmentPerMonth extends Fragment {
                 updateRecyclerView();
             }
         });
+        TextView tvYearlyTab = view.findViewById(R.id.tvYearlyTab);
+        tvYearlyTab.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new StatisticFragmentPerYear())
+                    .commit();
+        });
+
     }
 
     private void updateMonthTitle() {
@@ -194,7 +203,7 @@ public class StatisticFragmentPerMonth extends Fragment {
         filteredTransactions.sort((t1, t2) -> t2.getDate().compareTo(t1.getDate()));
 
         // Cập nhật adapter
-        adapter.setTransactionList(filteredTransactions);
+        adapter.updateTransactions(filteredTransactions);
     }
 
     private String formatCurrency(double amount) {

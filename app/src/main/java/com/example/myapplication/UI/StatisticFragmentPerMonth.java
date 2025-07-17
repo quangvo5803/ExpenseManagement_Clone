@@ -32,6 +32,8 @@ public class StatisticFragmentPerMonth extends Fragment {
     private Calendar currentCalendar;
     private boolean isExpenseTabSelected = true;
     private List<Transaction> currentTransactions;
+    private TextView tvMonthlyTab, tvYearlyTab;
+    private boolean isMonthlySelected = true;
 
     @Nullable
     @Override
@@ -54,6 +56,9 @@ public class StatisticFragmentPerMonth extends Fragment {
         btnPrev = view.findViewById(R.id.btnPrevMonth);
         btnNext = view.findViewById(R.id.btnNextMonth);
         recyclerView = view.findViewById(R.id.recyclerView);
+        // Thêm ánh xạ tab tháng/năm
+        tvMonthlyTab = view.findViewById(R.id.tvMonthlyTab);
+        tvYearlyTab = view.findViewById(R.id.tvYearlyTab);
 
         // Khởi tạo DatabaseHelper
         dbHelper = new DatabaseHelper(requireContext());
@@ -71,6 +76,8 @@ public class StatisticFragmentPerMonth extends Fragment {
         updateMonthTitle();
         loadStatistics();
         setupTabSelection();
+        // Hiệu ứng chuyển tab Hàng Tháng/Hàng Năm
+        setupMonthYearTab();
 
         // Xử lý chuyển tháng
         btnPrev.setOnClickListener(v -> {
@@ -99,6 +106,22 @@ public class StatisticFragmentPerMonth extends Fragment {
                 isExpenseTabSelected = false;
                 setupTabSelection();
                 updateRecyclerView();
+            }
+        });
+
+        // Xử lý chuyển tab Hàng Tháng/Hàng Năm
+        tvMonthlyTab.setOnClickListener(v -> {
+            if (!isMonthlySelected) {
+                isMonthlySelected = true;
+                setupMonthYearTab();
+                // TODO: load dữ liệu tháng nếu có
+            }
+        });
+        tvYearlyTab.setOnClickListener(v -> {
+            if (isMonthlySelected) {
+                isMonthlySelected = false;
+                setupMonthYearTab();
+                // TODO: load dữ liệu năm nếu có
             }
         });
     }
@@ -202,5 +225,20 @@ public class StatisticFragmentPerMonth extends Fragment {
         formatter.setMinimumFractionDigits(0);
         formatter.setMaximumFractionDigits(0);
         return formatter.format(Math.abs(amount));
+    }
+
+    // Thêm hàm hiệu ứng chuyển tab tháng/năm
+    private void setupMonthYearTab() {
+        if (isMonthlySelected) {
+            tvMonthlyTab.setBackgroundResource(R.drawable.selected_tab_bg);
+            tvMonthlyTab.setTextColor(getResources().getColor(android.R.color.white));
+            tvYearlyTab.setBackgroundResource(R.drawable.unselected_tab_bg);
+            tvYearlyTab.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        } else {
+            tvMonthlyTab.setBackgroundResource(R.drawable.unselected_tab_bg);
+            tvMonthlyTab.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tvYearlyTab.setBackgroundResource(R.drawable.selected_tab_bg);
+            tvYearlyTab.setTextColor(getResources().getColor(android.R.color.white));
+        }
     }
 }

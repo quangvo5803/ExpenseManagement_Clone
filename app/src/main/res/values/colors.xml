@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="holo_blue_light_custom" />
+    <color name="darker_gray_custom" />
+    <color name="blue_selected">#00BCD4</color>
+    <color name="gray_unselected">#888888</color>
+
 </resources>

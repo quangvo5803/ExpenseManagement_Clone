@@ -101,6 +101,14 @@ public class StatisticFragmentPerMonth extends Fragment {
                 updateRecyclerView();
             }
         });
+        TextView tvYearlyTab = view.findViewById(R.id.tvYearlyTab);
+        tvYearlyTab.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new StatisticFragmentPerYear())
+                    .commit();
+        });
+
     }
 
     private void updateMonthTitle() {

@@ -86,6 +86,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public Transaction getTransactionById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("transactions", null, "id = ?", new String[]{String.valueOf(id)},
+                null, null, null);
+
+        Transaction transaction = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            transaction = new Transaction(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("type")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("category")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("amount")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("note"))
+            );
+            cursor.close();
+        }
+        db.close();
+        return transaction;
+    }
+
+
+    public void updateTransaction(Transaction t) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("amount", t.getAmount());
+        values.put("note", t.getNote());
+        values.put("category", t.getCategory());
+        values.put("type", t.getType());
+        values.put("date", t.getDate());
+        db.update("transactions", values, "id=?", new String[]{String.valueOf(t.getId())});
+    }
+
     // Xoá tất cả giao dịch
     /*public void deleteAllTransactions() {
         SQLiteDatabase db = this.getWritableDatabase();

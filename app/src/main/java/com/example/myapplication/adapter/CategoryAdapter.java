@@ -24,7 +24,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private final Context context;
     private final List<Category> categoryList;
     private final OnCategoryClickListener listener;
-    private int selectedPosition = RecyclerView.NO_POSITION;
+    public int selectedPosition = RecyclerView.NO_POSITION;
 
     public CategoryAdapter(Context context, List<Category> categoryList, OnCategoryClickListener listener) {
         this.context = context;

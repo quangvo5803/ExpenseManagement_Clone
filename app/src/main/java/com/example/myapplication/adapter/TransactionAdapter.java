@@ -22,10 +22,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     private Context context;
     private List<Transaction> transactionList;
+    private OnTransactionClickListener listener;
 
-    public TransactionAdapter(Context context, List<Transaction> transactionList) {
+    public TransactionAdapter(Context context, List<Transaction> transactionList, OnTransactionClickListener listener) {
         this.context = context;
         this.transactionList = transactionList;
+        this.listener = listener;
     }
 
     @Override
@@ -53,6 +55,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         // Set icon theo category
         holder.imgIcon.setImageResource(getIconResource(transaction.getCategory()));
+
+        // Event listener
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onTransactionClick(transaction);
+            }
+        });
     }
 
     @Override
@@ -71,6 +80,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             tvNote = itemView.findViewById(R.id.tvNote);
             tvAmount = itemView.findViewById(R.id.tvAmount);
             tvDate = itemView.findViewById(R.id.tvDate);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onTransactionClick(transactionList.get(position));
+                }
+            });
         }
     }
     public void setTransactionList(List<Transaction> list) {
@@ -105,5 +121,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             default:
                 return R.drawable.ic_launcher_foreground;
         }
+    }
+
+    public interface OnTransactionClickListener {
+        void onTransactionClick(Transaction transaction);
+    }
+    public void setOnTransactionClickListener(OnTransactionClickListener listener) {
+        this.listener = listener;
     }
 }

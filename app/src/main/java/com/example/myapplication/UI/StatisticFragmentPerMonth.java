@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class StatisticFragmentPerMonth extends Fragment {
+public class StatisticFragmentPerMonth extends Fragment implements  TransactionAdapter.OnTransactionClickListener {
 
     private TextView tvCurrentMonth, tvIncomeAmount, tvExpenseAmount, tvTotalAmount;
     private TextView tvExpenseTab, tvIncomeTab;
@@ -64,7 +65,7 @@ public class StatisticFragmentPerMonth extends Fragment {
 
         // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new TransactionAdapter(requireContext(), new ArrayList<>());
+        adapter = new TransactionAdapter(requireContext(), new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
 
         // Cập nhật giao diện ban đầu
@@ -102,7 +103,14 @@ public class StatisticFragmentPerMonth extends Fragment {
             }
         });
     }
-
+    @Override
+    public void onTransactionClick(Transaction transaction) {
+        EditTransactionFragment editFragment = EditTransactionFragment.newInstance(transaction);
+        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, editFragment); // Thay fragment_container bằng ID layout trong activity chứa fragment
+        ft.addToBackStack(null);
+        ft.commit();
+    }
     private void updateMonthTitle() {
         int year = currentCalendar.get(Calendar.YEAR);
         int month = currentCalendar.get(Calendar.MONTH) + 1;

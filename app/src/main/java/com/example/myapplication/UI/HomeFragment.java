@@ -39,7 +39,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements TransactionAdapter.OnTransactionClickListener {
 
     private MaterialCalendarView calendarView;
     private TextView tvCurrentMonth,tvIncome,tvExpense,tvTotal;
@@ -56,6 +56,8 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Inflate layout cho fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
+
+
     }
 
     @Override
@@ -86,7 +88,7 @@ public class HomeFragment extends Fragment {
 
         // Setup RecyclerView
         allTransactions = new ArrayList<>();
-        adapter = new TransactionAdapter(requireContext(), new ArrayList<>());
+        adapter = new TransactionAdapter(requireContext(), new ArrayList<>(), this); // truyền listenner
         rvTransactions.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvTransactions.setAdapter(adapter);
 
@@ -115,6 +117,31 @@ public class HomeFragment extends Fragment {
         decorateCalendarWithTransactions();
     }
 
+
+    @Override
+    public void onTransactionClick(Transaction transaction) {
+        Fragment editFragment;
+
+        if ("income".equals(transaction.getType())) {
+            editFragment = new EditIncomeTransactionFragment();
+        } else {
+            editFragment = new EditExpenseTransactionFragment();
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("transaction", transaction);
+        editFragment.setArguments(bundle);
+
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, editFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+
+
     private void updateCalendarView() {
         LocalDate date = LocalDate.of(
                 currentCalendar.get(Calendar.YEAR),
@@ -131,7 +158,6 @@ public class HomeFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM, yyyy");
         tvCurrentMonth.setText(sdf.format(currentCalendar.getTime()));
     }
-
 
     private void filterTransactionsByMonth() {
         List<Transaction> filteredList = new ArrayList<>();
@@ -202,5 +228,6 @@ public class HomeFragment extends Fragment {
         for (Map.Entry<CalendarDay, List<Integer>> entry : dotMap.entrySet()) {
             calendarView.addDecorator(new TransactionDotDecorator(entry.getKey(), entry.getValue()));
         }    }
+
 
 }

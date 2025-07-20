@@ -1,9 +1,10 @@
 package com.example.myapplication.data.model;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Transaction {
+public class Transaction  implements Serializable {
     private int id;
     private String type; // "income" hoặc "expense"
     private String category;

@@ -45,7 +45,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.tvName.setText(category.getName());
         holder.ivIcon.setImageResource(category.getIconResId());
 
-        // Highlight nếu đang được chọn
+        // Highlight nếu được chọn
         if (position == selectedPosition) {
             holder.itemView.setBackgroundResource(R.drawable.bg_category_selected);
         } else {
@@ -66,13 +66,26 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categoryList.size();
     }
 
-    // Hàm reset lựa chọn danh mục
     public void clearSelection() {
         int previousPosition = selectedPosition;
         selectedPosition = RecyclerView.NO_POSITION;
         if (previousPosition != RecyclerView.NO_POSITION) {
             notifyItemChanged(previousPosition);
         }
+    }
+
+    public void setSelectedCategory(String selectedCategory) {
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getName().equals(selectedCategory)) {
+                selectedPosition = i;
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
     }
 
     static class CategoryViewHolder extends RecyclerView.ViewHolder {

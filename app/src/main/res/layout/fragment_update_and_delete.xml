@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="40dp"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <!-- Ngày -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Tiêu đề + Icon trái -->
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvDateLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Ngày"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivPrevDate"
+                    android:layout_width="0dp"
+                    android:layout_height="14dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_chevron_left"
+                    android:layout_gravity="center_vertical"
+                    app:tint="@android:color/background_light"
+                    android:contentDescription="Previous Date" />
+            </LinearLayout>
+
+            <!-- Ngày được chọn -->
+            <TextView
+                android:id="@+id/etDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_edittext"
+                android:gravity="center"
+                android:padding="12dp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+            <!-- Icon phải -->
+            <ImageView
+                android:id="@+id/ivNextDate"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@android:color/background_light"
+                android:contentDescription="Next Date" />
+
+        </LinearLayout>
+
+
+        <!-- Ghi chú  -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
+
+            <!-- Tiêu đề -->
+            <TextView
+                android:id="@+id/tvNoteLabel"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="Ghi chú"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Nội dung ghi chú -->
+            <EditText
+                android:id="@+id/etNote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edittext"
+                android:padding="12dp"
+                android:hint="(không bắt buộc)"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="8dp"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <!-- Số tiền (dòng gồm: Tiền thu | ô nhập | đ) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Tiêu đề -->
+            <TextView
+                android:id="@+id/tvAmountLabel"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="Tiền chi"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Ô nhập -->
+            <EditText
+                android:id="@+id/etAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edittext"
+                android:gravity="end"
+                android:inputType="numberDecimal"
+                android:padding="12dp"
+                android:textColor="@android:color/black" />
+
+            <!-- Đơn vị -->
+            <TextView
+                android:id="@+id/tvCurrency"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:text="đ"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <!-- Danh mục tiêu đề -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danh mục"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- RecyclerView Danh mục -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Nút lưu -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cập nhật"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/black"
+            android:padding="12dp" />
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Xóa"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#FF0000"
+            android:textColor="@android:color/white"
+            android:padding="12dp" />
+    </LinearLayout>
+</ScrollView>

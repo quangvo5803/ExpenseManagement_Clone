@@ -86,10 +86,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Xoá tất cả giao dịch
-    /*public void deleteAllTransactions() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TRANSACTIONS, null, null);
+    public Transaction getTransactionById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_TRANSACTIONS + " WHERE id=?", new String[]{String.valueOf(id)});
+        Transaction transaction = null;
+
+        if (cursor.moveToFirst()) {
+            transaction = new Transaction(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("type")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("category")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("amount")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("note"))
+            );
+        }
+
+        cursor.close();
         db.close();
-    }*/
+        return transaction;
+    }
+
+    public void updateTransaction(Transaction transaction) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("type", transaction.getType());
+        values.put("category", transaction.getCategory());
+        values.put("amount", transaction.getAmount());
+        values.put("date", transaction.getDate());
+        values.put("note", transaction.getNote());
+
+        db.update(TABLE_TRANSACTIONS, values, "id=?", new String[]{String.valueOf(transaction.getId())});
+        db.close();
+    }
+
 }

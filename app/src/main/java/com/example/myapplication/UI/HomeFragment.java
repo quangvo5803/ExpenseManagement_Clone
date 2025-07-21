@@ -93,6 +93,18 @@ public class HomeFragment extends Fragment {
         // Load dữ liệu
         allTransactions = databaseHelper.getAllTransactions();
 
+        adapter.setOnTransactionClickListener(transaction -> {
+            int id = transaction.getId();
+
+            UpdateAndDeleteFragment fragment = UpdateAndDeleteFragment.newInstance(id);
+
+            // Chuyển fragment
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment) // id trong layout của Activity
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         // Chuyển tháng
         btnNext.setOnClickListener(v -> {
